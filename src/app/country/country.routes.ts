@@ -30,6 +30,13 @@ export const countryRoutes: Routes = [
           ),
       },
       {
+        path: "by/:code",
+        loadComponent: () =>
+          import('./pages/country-page/country-page.component').then(
+            (m) => m.CountryPageComponent
+          ),
+      },
+      {
         path: '**',
         redirectTo: 'by-capital',
       },
