@@ -1,9 +1,10 @@
 import { Component, input } from '@angular/core';
 import { Country } from '../../types/country.type';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-country-list',
-  imports: [],
+  imports: [DecimalPipe],
   templateUrl: './country-list.component.html',
   styleUrl: './country-list.component.css'
 })
