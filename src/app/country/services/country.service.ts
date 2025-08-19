@@ -42,4 +42,21 @@ export class CountryService {
       })
     );
   }
+
+  searchByAlphaCode(query: string) {
+    query = query.toLocaleLowerCase();
+
+    return this.http.get<RESTCountry[]>(`${API_URL}/alpha/${query}`).pipe(
+      map((restCountries) =>
+        CountryMapper.mapRestCountryArrayToCountryArray(restCountries)
+      ),
+      map(countries => countries.at(0)),
+      // delay(3000),
+      catchError((error) => {
+        return throwError(
+          () => new Error('No se pudo obtener países con esa query')
+        );
+      })
+    );
+  }
 }
