@@ -16,6 +16,20 @@ export const countryRoutes: Routes = [
           ),
       },
       {
+        path: 'by-country',
+        loadComponent: () =>
+          import('./pages/by-country-page/by-country-page.component').then(
+            (m) => m.ByCountryPageComponent
+          ),
+      },
+      {
+        path: 'by-region',
+        loadComponent: () =>
+          import('./pages/by-region-page/by-region-page.component').then(
+            (m) => m.ByRegionPageComponent
+          ),
+      },
+      {
         path: '**',
         redirectTo: 'by-capital',
       },
