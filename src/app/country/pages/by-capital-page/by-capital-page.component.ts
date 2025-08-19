@@ -1,15 +1,29 @@
-import { Component } from '@angular/core';
-import { SearchInputComponent } from "../../components/search-input/search-input.component";
-import { CountryListComponent } from "../../components/country-list/country-list.component";
+import { Component, inject, signal } from '@angular/core';
+import { SearchInputComponent } from '../../components/search-input/search-input.component';
+import { CountryListComponent } from '../../components/country-list/country-list.component';
+import { CountryService } from '../../services/country.service';
+import { Country } from '../../types/country.type';
 
 @Component({
   selector: 'app-by-capital-page',
   imports: [SearchInputComponent, CountryListComponent],
   templateUrl: './by-capital-page.component.html',
-  styleUrl: './by-capital-page.component.css'
+  styleUrl: './by-capital-page.component.css',
 })
 export class ByCapitalPageComponent {
+  countryService = inject(CountryService);
+
+  isLoading = signal(false);
+  isError = signal<string | null>(null);
+  countries = signal<Country[]>([]);
+
   onSearch(value: string) {
-    console.log('Desde el layout', value);
+    if (this.isLoading()) return;
+    this.isLoading.set(true);
+    this.isError.set(null);
+    this.countryService.searchByCapital(value).subscribe((resp) => {
+      this.isLoading.set(false);
+      this.countries.set(resp);
+    });
   }
 }
