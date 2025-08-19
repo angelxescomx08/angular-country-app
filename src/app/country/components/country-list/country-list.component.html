@@ -17,21 +17,21 @@
         <td>{{ index + 1 }}</td>
         <td>{{ country.flag }}</td>
         <td>
-          <img
-            class="w-10"
-            [src]="country.flagSvg"
-            [alt]="country.name"
-          />
+          <img class="w-10" [src]="country.flagSvg" [alt]="country.name" />
         </td>
         <td>{{ country.name }}</td>
         <td>{{ country.capital }}</td>
         <td>
           <span class="badge badge-secondary">
-            {{ country.population | number}}
+            {{ country.population | number }}
           </span>
         </td>
         <td>
-          <a class="link-primary cursor-pointer">Más información</a>
+          <a
+            [routerLink]="['/country/by', country.cca2]"
+            class="link-primary cursor-pointer"
+            >Más información</a
+          >
         </td>
       </tr>
       }
