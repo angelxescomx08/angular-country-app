@@ -1,2 +1,7 @@
-<app-search-input (searchValue)="onSearch($event)" />
-<app-country-list [countries]="countries()" />
+<app-search-input (searchValue)="query.set($event)" />
+
+@if (countryResource.error()) {
+  <h3>{{countryResource.error()}}</h3>
+}@if (countryResource.hasValue()) {
+  <app-country-list [countries]="countryResource.value()" />
+}
