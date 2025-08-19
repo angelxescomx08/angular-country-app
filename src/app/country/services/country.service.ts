@@ -4,6 +4,7 @@ import { RESTCountry } from '../types/rest-countries.type';
 import { catchError, delay, map, of, tap, throwError } from 'rxjs';
 import { CountryMapper } from '../mappers/country.mapper';
 import { Country } from '../types/country.type';
+import { Region } from '../types/region.type';
 
 const API_URL = 'https://restcountries.com/v3.1';
 
@@ -14,6 +15,7 @@ export class CountryService {
   private http = inject(HttpClient);
   private queryCacheCapital = new Map<string,Country[]>()
   private queryCacheCountry = new Map<string,Country[]>()
+  private queryCacheRegion = new Map<Region,Country[]>()
 
   searchByCapital(query: string) {
     query = query.toLocaleLowerCase();
@@ -64,6 +66,25 @@ export class CountryService {
         CountryMapper.mapRestCountryArrayToCountryArray(restCountries)
       ),
       map(countries => countries.at(0)),
+      // delay(3000),
+      catchError((error) => {
+        return throwError(
+          () => new Error('No se pudo obtener países con esa query')
+        );
+      })
+    );
+  }
+
+  searchByRegion(region: Region) {
+    if(this.queryCacheRegion.has(region)){
+      return of(this.queryCacheRegion.get(region));
+    }
+
+    return this.http.get<RESTCountry[]>(`${API_URL}/region/${region}`).pipe(
+      map((restCountries) =>
+        CountryMapper.mapRestCountryArrayToCountryArray(restCountries)
+      ),
+      tap(countries => this.queryCacheRegion.set(region, countries)),
       // delay(3000),
       catchError((error) => {
         return throwError(
